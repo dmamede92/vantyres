@@ -1,0 +1,125 @@
+{% extends 'menu.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Usuarios {% endblock %}
+
+{% block content %}
+
+<div class="custom-container">
+    <p><i class="fas fa-user" style="margin-left: 20px;"></i> /home/usuarios/novo</p>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="alert alert-{{message.tags}}" {% endif %}> {{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form method="POST" onsubmit="remove_mask(this)">
+    {% csrf_token %}
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <h2>Informações:</h2>
+            <hr>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.nome|as_crispy_field }}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id_tipo">Tipo de Pessoa:</label>
+                            <select class="form-control tipo" id="id_tipo" name="tipo">
+                                <option value="" selected disabled>Selecione o tipo de pessoa</option>
+                                {% for key, value in tipos %}
+                                <option value="{{ key }}">{{ value }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.cpf_cnpj|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.data_nascimento|as_crispy_field }}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id_perfil">Perfil:</label>
+                            <select class="form-control" id="id_perfil" name="profiles">
+                                <option value="" selected disabled>Selecione o perfil</option>
+                                {% for profile in profiles %}
+                                <option value="{{ profile.id }}">{{ profile.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.password|as_crispy_field}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <h2>Contato:</h2>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.telefone_celular|as_crispy_field }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.telefone_comercial|as_crispy_field}}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.email|as_crispy_field}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <h2>Endereço:</h2>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4 position-relative">
+                        {{ form.cep|as_crispy_field }}
+                        <i class="fas fa-search" id="btn-consultar-cep"
+                           style="position: absolute; right: 22px; top: 58%; transform: translateY(-50%);"></i>
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.cidade|as_crispy_field}}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.estado|as_crispy_field}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.logradouro|as_crispy_field}}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.complemento|as_crispy_field}}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.numero|as_crispy_field}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary mr-2">Gravar</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/users/'">Fechar</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

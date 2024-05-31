@@ -1,0 +1,27 @@
+{% extends 'menu.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Marca: '{{marca.nome}}' {% endblock %}
+
+{% block content %}
+
+<div class="custom-container">
+    <p><i class="fas fa-solid fa-car" style="margin-left: 20px;"></i> /home/marcas/editar</p>
+</div>
+<div class="mt-2 white-container">
+    <div class="offset-1 col-10 list-div">
+        <h1>Editar Perfil</h1>
+        <form method="POST">
+            <div class="card-body">
+                {% csrf_token %}
+
+                {{ form.name|as_crispy_field }}
+                {{ form.description|as_crispy_field}}
+            </div>
+            <div class="card-body">
+                <input type="submit" class="btn btn-success" value="Gravar">
+                <button type="button" class="btn btn-danger" onclick="history.back()">Voltar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

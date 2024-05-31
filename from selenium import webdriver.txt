@@ -1,0 +1,29 @@
+from selenium import webdriver
+import keyboard
+
+
+# Caminho para o ChromeDriver baixado manualmente
+chrome_driver_path = "C:/Users/David Pereira Mamede/Documents/chromedriver.exe"
+
+# Configurar opções do Chrome
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = chrome_driver_path
+chrome_options.add_argument("--no-sandbox")
+
+
+# Inicializar o driver do Chrome
+driver = webdriver.Chrome(options=chrome_options)
+
+# URL da página que você deseja acessar
+url = "https://api.whatsapp.com/send/?phone=5511910004288&text=Tenho+interesse+em+comprar+seu+carro&type=phone_number&app_absent=0"
+
+# Acessando a página
+driver.get(url)
+
+# Aguarde alguns segundos (opcional)
+driver.implicitly_wait(10)  # Espera por 10 segundos
+keyboard.press_and_release('tab')
+keyboard.press_and_release('enter')
+
+# Fechando o navegador
+driver.quit()

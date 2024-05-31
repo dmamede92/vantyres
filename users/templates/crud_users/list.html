@@ -1,0 +1,100 @@
+{% extends 'menu.html' %}
+{% block title %} Usuarios {% endblock %}
+
+{% block content %}
+
+<div class="custom-container" style="display: flex; justify-content: space-between; align-items: center;">
+    <p><i class="fas fa-user" style="margin-left: 20px;"></i> /home/usuarios</p>
+    <p style="text-align: right; padding-right: 30px;"><i class="fas fa-address-card fa-fw me-3"></i> {{ user.profiles.name }}</p>
+</div>
+
+<div class="white-container mt-1">
+    <h2>Pesquisar</h2>
+    <form method="GET" id="search-form">
+        <div class="row">
+            <div class="col-3">
+                <label for="name-filter">Nome: </label>
+                <input class="form-control" type="text" id="name-filter" name="name_filter"
+                       placeholder="Digite o nome do usuário..." value="{{ request.GET.name_filter }}">
+            </div>
+            <div class="col-3">
+                <label for="email-filter">Email: </label>
+                <input class="form-control" type="text" id="email-filter" name="email_filter"
+                       placeholder="Digite o email do usuário..." value="{{ request.GET.email_filter }}">
+            </div>
+            <div class="col-3">
+                <form method="GET" id="status-filter-form">
+                    <label for="status-filter">Status: </label>
+                    <select class="form-control" id="status-filter" name="status_filter">
+                        <option value="">Selecione...</option>
+                        <option value="ati">Ativo</option>
+                        <option value="ina">Inativo</option>
+                    </select>
+                </form>
+            </div>
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary mt-4">Pesquisar</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %}class="alert alert-{{message.tags}}" {% endif %}> {{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class="mt-2 white-container custom-width-centered">
+    <div class="text-center mb-2">
+        <a href="/users/new">
+            <div class="col-2 add-div">
+                <i class="fas fa-plus"></i> Adicionar
+            </div>
+        </a>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.id }}</td>
+            <td>{{ usuario.nome }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.get_status_display }}</td>
+            <td>
+                <a href="/users/delete/{{ usuario.id }}" class="delete-btn"><span><i
+                        class="fas fa-trash"></i></span></a>
+                <a href="/users/{{ usuario.id }}"><span><i class="fas fa-edit"></i></span></a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if usuarios.has_previous %}
+                <a href="?page={{ usuarios.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+            {% endif %}
+
+            {% if usuarios.paginator.num_pages %}
+                <span class="current">
+                    {{ usuarios.number }} de {{ usuarios.paginator.num_pages }}
+                </span>
+            {% endif %}
+
+            {% if usuarios.has_next %}
+                <a href="?page={{ usuarios.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endblock %}

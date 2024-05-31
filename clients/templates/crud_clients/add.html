@@ -1,0 +1,175 @@
+{% extends 'menu.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Clientes {% endblock %}
+
+{% block content %}
+
+<div class="custom-container">
+    <p><i class="fas fa-regular fa-briefcase" style="margin-left: 20px;"></i> /home/clientes/novo</p>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="alert alert-{{message.tags}}" {% endif %}> {{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form method="POST" onsubmit="remove_mask(this)">
+    {% csrf_token %}
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <h2>Informações:</h2>
+            <hr>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.nome|as_crispy_field }}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id_tipo">Tipo de Pessoa:</label>
+                            <select class="form-control tipo" id="id_tipo" name="tipo">
+                                <option value="" selected disabled>Selecione o tipo de pessoa</option>
+                                {% for key, value in tipos %}
+                                <option value="{{ key }}" {% if form.tipo.value == key %} selected {% endif %}>{{ value
+                                    }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.cpf_cnpj|as_crispy_field }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.rg|as_crispy_field }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.data_nascimento|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <h2>Contato:</h2>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.telefone_celular|as_crispy_field }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.telefone_comercial|as_crispy_field}}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.email|as_crispy_field}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <h2>Endereço:</h2>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4 position-relative">
+                        {{ form.cep|as_crispy_field }}
+                        <i class="fas fa-search" id="btn-consultar-cep"
+                           style="position: absolute; right: 22px; top: 58%; transform: translateY(-50%);"></i>
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.cidade|as_crispy_field}}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.estado|as_crispy_field}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.logradouro|as_crispy_field}}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.complemento|as_crispy_field}}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.numero|as_crispy_field}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <h2>Veículo:</h2>
+                <hr>
+                <div class="mt-2 white-container custom-width-centered">
+                    <div class="text-center mb-2">
+                        <a href="/clients/new/vehicle">
+                            <div class="col-2 add-div">
+                                <i class="fas fa-plus"></i> Adicionar
+                            </div>
+                        </a>
+                    </div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for client in clients %}
+                        <tr>
+                            <td>{{ client.id }}</td>
+                            <td>{{ client.nome }}</td>
+                            <td>{{ client.email }}</td>
+                            <td>{{ client.get_status_display }}</td>
+                            <td>
+                                <a href="/clients/delete/{{ client.id }}" class="delete-btn"><span><i
+                                        class="fas fa-trash"></i></span></a>
+                                <a href="/clients/{{ client.id }}"><span><i class="fas fa-edit"></i></span></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                    <span class="step-links">
+                        {% if clients.has_previous %}
+                            <a href="?page={{ clients.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+                        {% endif %}
+
+                        {% if clients.paginator.num_pages %}
+                            <span class="current">
+                                {{ clients.number }} de {{ clients.paginator.num_pages }}
+                            </span>
+                        {% endif %}
+
+                        {% if clients.has_next %}
+                            <a href="?page={{ clients.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+                        {% endif %}
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary mr-2">Gravar</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/clients/'">Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

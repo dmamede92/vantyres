@@ -1,0 +1,56 @@
+{% extends 'menu.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Clients {% endblock %}
+
+{% block content %}
+
+<div class="custom-container">
+    <p><i class="fas fa-user" style="margin-left: 20px;"></i> /home/clients/novo/veiculo</p>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="alert alert-{{message.tags}}" {% endif %}> {{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form method="POST" onsubmit="remove_mask(this)">
+    {% csrf_token %}
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <h2>Novo Veículo:</h2>
+            <hr>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id_brand">Marca:</label>
+                            <select class="form-control" id="id_brand" name="brands">
+                                <option value="" selected disabled>Selecione a marca</option>
+                                {% for brand in brands %}
+                                <option value="{{ brand.id }}">{{ brand.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.modelo|as_crispy_field }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.ano|as_crispy_field }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary mr-2">Gravar</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/users/'">Fechar</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
