@@ -228,6 +228,10 @@ body {
     overflow-x: hidden; /* Impede a rolagem horizontal */
 }
 
+.hidden {
+    display: none;
+}
+
 #sidebarMenu {
     position: fixed;
     top: 0;

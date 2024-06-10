@@ -79,3 +79,67 @@ function remove_mask(form){
     $('.cpf_cnpj').unmask();
     $('.rg').unmask();
 }
+
+function toggleDivs() {
+        var hideDiv = document.getElementById('client-info');
+        var hideDiv2 = document.getElementById('contact-info');
+        var hideDiv3 = document.getElementById('address-info');
+        var hideDiv4 = document.getElementById('control_submit');
+        var hideDiv5 = document.getElementById('add_vehicle_form');
+        var hideDiv6 = document.getElementById('table_vehicle');
+        var showDiv = document.getElementById('vehicle_form');
+        var showDiv2 = document.getElementById('control_vehicle');
+
+        hideDiv.style.display = "none";
+        hideDiv2.style.display = "none";
+        hideDiv3.style.display = "none";
+        hideDiv4.style.display = "none";
+        hideDiv5.style.display = "none";
+        hideDiv6.style.display = "none";
+
+        showDiv.style.display = "block";
+        showDiv2.style.display = "block";
+
+}
+
+function toggleShow2() {
+        var hideDiv = document.getElementById('client-info');
+        var hideDiv2 = document.getElementById('contact-info');
+        var hideDiv3 = document.getElementById('address-info');
+        var hideDiv4 = document.getElementById('control_submit');
+        var hideDiv5 = document.getElementById('add_vehicle_form');
+        var hideDiv6 = document.getElementById('table_vehicle');
+        var showDiv = document.getElementById('vehicle_form');
+        var showDiv2 = document.getElementById('control_vehicle');
+
+        hideDiv.style.display = "block";
+        hideDiv2.style.display = "block";
+        hideDiv3.style.display = "block";
+        hideDiv4.style.display = "block";
+        hideDiv5.style.display = "block";
+        hideDiv6.style.display = "block";
+
+        showDiv.style.display = "none";
+        showDiv2.style.display = "none";
+
+}
+
+function toggleDivs2(hideDivId, showDivId, tableDiv) {
+        var hideDiv = document.getElementById(hideDivId);
+        var showDiv = document.getElementById(showDivId);
+        var hideTableDiv = document.getElementById(tableDiv);
+
+        hideDiv.style.display = "none";
+        hideTableDiv.style.display = "none";
+        showDiv.style.display = "block";
+}
+
+function toggleShow(hideDivId, showDivId, tableDiv) {
+    var hideDiv = document.getElementById(hideDivId);
+    var showDiv = document.getElementById(showDivId);
+    var hideTableDiv = document.getElementById(tableDiv);
+
+    hideDiv.style.display = "block";
+    hideTableDiv.style.display = "block";
+    showDiv.style.display = "none";
+}

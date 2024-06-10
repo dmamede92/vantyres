@@ -1,29 +1,13 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
 from brands.models import Brand
 
 
-class Vehicle(models.Model):
-    objects = None
-
-    modelo = models.CharField(max_length=30)
-    ano = models.CharField(max_length=4)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    brands = models.ForeignKey(Brand(), on_delete=models.SET_NULL, null=True, verbose_name='Marcas:')
-
-
-
-
 class Clients(models.Model):
-    objects = None
     STATUS = (
         ('ati', 'Ativo'),
         ('ina', 'Inativo'),
     )
-    TIPO = (('fis', 'Pessoa Fisica'), ('jud', 'Pessoa Juridica'))
+    TIPO = (('fis', 'Pessoa Física'), ('jud', 'Pessoa Jurídica'))
 
     nome = models.CharField(max_length=200)
     tipo = models.CharField(max_length=8, choices=TIPO, null=True)
@@ -40,7 +24,6 @@ class Clients(models.Model):
     numero = models.CharField(max_length=10, blank=True, null=True, verbose_name='Número:')
     cidade = models.CharField(max_length=100, blank=True, null=True, verbose_name='Cidade:')
     estado = models.CharField(max_length=2, blank=True, null=True, verbose_name='Estado:')
-    veiculos = models.CharField(max_length=15, blank=True, null=True, verbose_name='Veiculos:')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
@@ -56,3 +39,17 @@ class Clients(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class Vehicle(models.Model):
+    modelo = models.CharField(max_length=30)
+    ano = models.CharField(max_length=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, verbose_name='Marcas:')
+    client = models.ForeignKey(Clients, related_name='veiculos', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.modelo} ({self.ano})'

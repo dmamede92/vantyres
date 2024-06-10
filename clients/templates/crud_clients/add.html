@@ -16,7 +16,7 @@
 {% endif %}
 <form method="POST" onsubmit="remove_mask(this)">
     {% csrf_token %}
-    <div class="mt-2 white-container">
+    <div id="client-info" class="mt-2 white-container">
         <div class="offset-1 col-10 list-div">
             <h2>Informações:</h2>
             <hr>
@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-    <div class="mt-2 white-container">
+    <div id="contact-info" class="mt-2 white-container">
         <div class="offset-1 col-10 list-div">
             <div class="card-body">
                 <h2>Contato:</h2>
@@ -70,7 +70,7 @@
             </div>
         </div>
     </div>
-    <div class="mt-2 white-container">
+    <div id="address-info" class="mt-2 white-container">
         <div class="offset-1 col-10 list-div">
             <div class="card-body">
                 <h2>Endereço:</h2>
@@ -102,72 +102,85 @@
             </div>
         </div>
     </div>
-    <div class="mt-2 white-container">
+    <div id="vehicle-info" class="mt-2 white-container">
         <div class="offset-1 col-10 list-div">
-            <div class="card-body">
-                <h2>Veículo:</h2>
+            <div class="card-body" id="add_vehicle_form">
+                <h2>Veículos:</h2>
                 <hr>
-                <div class="mt-2 white-container custom-width-centered">
-                    <div class="text-center mb-2">
-                        <a href="/clients/new/vehicle">
-                            <div class="col-2 add-div">
-                                <i class="fas fa-plus"></i> Adicionar
-                            </div>
-                        </a>
-                    </div>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for client in clients %}
-                        <tr>
-                            <td>{{ client.id }}</td>
-                            <td>{{ client.nome }}</td>
-                            <td>{{ client.email }}</td>
-                            <td>{{ client.get_status_display }}</td>
-                            <td>
-                                <a href="/clients/delete/{{ client.id }}" class="delete-btn"><span><i
-                                        class="fas fa-trash"></i></span></a>
-                                <a href="/clients/{{ client.id }}"><span><i class="fas fa-edit"></i></span></a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    <div class="pagination">
-                    <span class="step-links">
-                        {% if clients.has_previous %}
-                            <a href="?page={{ clients.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
-                        {% endif %}
-
-                        {% if clients.paginator.num_pages %}
-                            <span class="current">
-                                {{ clients.number }} de {{ clients.paginator.num_pages }}
-                            </span>
-                        {% endif %}
-
-                        {% if clients.has_next %}
-                            <a href="?page={{ clients.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
-                        {% endif %}
-                    </span>
+                <div class="row justify-content-center">
+                    <div class="col-md-3 text-center">
+                        <button type="button" onclick="toggleDivs()"
+                                class="btn btn-primary mt-4" id="add-vehicle-btn2">Adicionar
+                        </button>
                     </div>
                 </div>
             </div>
+            <div class="card-body hidden" id="vehicle_form">
+                <h2>Veículos:</h2>
+                <hr>
+                {{ vehicle_formset.management_form }}
+                {% for form in vehicle_formset %}
+                <div class="row">
+                    <div class="col-md-3">
+                        {{ form.modelo|as_crispy_field }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form.ano|as_crispy_field }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="id_brands">Marca:</label>
+                        <select class="form-control" id="id_brands" name="brand">
+                            <option value="" selected disabled>Selecione a marca</option>
+                            {% for brand in brands %}
+                            <option value="{{ brand.id }}">{{ brand.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="card-body" id="table_vehicle">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Ano</th>
+                        <th>Marca</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for veiculo in veiculos %}
+                    <tr>
+                        <td>{{ veiculo.modelo }}</td>
+                        <td>{{ veiculo.ano }}</td>
+                        <td>{{ veiculo.brand }}</td>
+                        <td>
+                            <button type="submit" onclick="toggleDivs()" name="edit_veiculo"
+                                class="btn btn-primary mt-4" value="{{ forloop.counter0 }}">Adicionard
+                        </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <div class="mt-2 white-container">
+    <div class="mt-2 white-container hidden" id="control_vehicle">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary" id="add-vehicle-btn"
+                        name="add_veiculo" onclick="toggleShow2()">Adicionar</button>
+                <button type="button" class="btn btn-danger" onclick="toggleShow2()">Voltar</button>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container" id="control_submit">
         <div class="offset-1 col-10 list-div">
             <div class="card-body">
                 <button type="submit" class="btn btn-primary mr-2">Gravar</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='/clients/'">Fechar
-                </button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/clients/'">Fechar</button>
             </div>
         </div>
     </div>

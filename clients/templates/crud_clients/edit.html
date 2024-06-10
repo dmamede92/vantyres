@@ -9,11 +9,11 @@
     <p class="text-center">Cliente: {{ client.nome }}</p>
 </div>
 {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li {% if message.tags %} class="alert alert-{{message.tags}}" {% endif %}> {{ message }}</li>
-        {% endfor %}
-    </ul>
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="alert alert-{{message.tags}}" {% endif %}> {{ message }}</li>
+    {% endfor %}
+</ul>
 {% endif %}
 <form method="POST" onsubmit="remove_mask(this)">
     {% csrf_token %}
@@ -96,7 +96,81 @@
             </div>
         </div>
     </div>
-    <div class="mt-2 white-container-btn">
+    <div id="vehicle-info" class="mt-2 white-container">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body" id="add_vehicle_form">
+                <h2>Veículos:</h2>
+                <hr>
+                <div class="row justify-content-center">
+                    <div class="col-md-3 text-center">
+                        <button type="button" onclick="toggleDivs()"
+                                class="btn btn-primary mt-4" id="add-vehicle-btn2">Adicionar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body hidden" id="vehicle_form">
+                <h2>Veículos:</h2>
+                <hr>
+                {{ vehicle_formset.management_form }}
+                {% for form in vehicle_formset %}
+                <div class="row">
+                    <div class="col-md-3">
+                        {{ form.modelo|as_crispy_field }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form.ano|as_crispy_field }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="id_brands">Marca:</label>
+                        <select class="form-control" id="id_brands" name="brand">
+                            <option value="" selected disabled>Selecione a marca</option>
+                            {% for brand in brands %}
+                            <option value="{{ brand.id }}">{{ brand.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="card-body" id="table_vehicle">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Ano</th>
+                        <th>Marca</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for veiculo in client.veiculos.all %}
+                    <tr>
+                        <td>{{ veiculo.modelo }}</td>
+                        <td>{{ veiculo.ano }}</td>
+                        <td>{{ veiculo.brand }}</td>
+                        <td>
+                            <button type="submit" onclick="toggleDivs()" name="edit_veiculo"
+                                class="btn btn-primary mt-4" value="{{ forloop.counter0 }}">Adicionard
+                        </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container hidden" id="control_vehicle">
+        <div class="offset-1 col-10 list-div">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary" id="add-vehicle-btn"
+                        name="add_veiculo" onclick="toggleShow2()">Adicionar</button>
+                <button type="button" class="btn btn-danger" onclick="toggleShow2()">Voltar</button>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 white-container-btn" id="control_submit">
         <div class="offset-1 col-10 list-div">
             <div class="card-body">
                 <button type="submit" class="btn btn-primary mr-2">Gravar</button>
